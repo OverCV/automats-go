@@ -20,17 +20,17 @@
   ],
   "Transitions": [
     {
-      "Start": "q0",
-      "End": "q1",
+      "Start": "q1",
+      "End": "q0",
       "Chars": [
-        "a",
         "b"
       ]
     },
     {
-      "Start": "q1",
-      "End": "q0",
+      "Start": "q0",
+      "End": "q1",
       "Chars": [
+        "a",
         "b"
       ]
     }
