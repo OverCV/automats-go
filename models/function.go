@@ -18,6 +18,10 @@ func NewFunction(automata *Automata) *Function {
 	}
 }
 
+func (f *Function) SetAutomata(automata *Automata) {
+	f.automata = automata
+}
+
 func (f *Function) SetString(inputString string) {
 	f.inputString = inputString
 }
