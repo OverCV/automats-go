@@ -255,14 +255,11 @@ func (d *Determiner) getStatesAtt(statesData []string) (bool, bool) {
 func (d *Determiner) stateIndexByData(stateDataRegistry map[string][]string, destination string) string {
 	for stateIndex, statesData := range stateDataRegistry {
 		if contains(statesData, destination) {
-			return stateIndexstateIndexByData(stateDataRegistry map[string][]string, destination string) string {
-	fo stateIndex, statesData := range stateDataRegistry {
-		f contains(statesData, destination) {
-			return tateIndex
+			return stateIndex
+		}
 	}
-}
 	return ""
-
+}
 
 /* ---------------------------------------------------------------------------------------- */
 
