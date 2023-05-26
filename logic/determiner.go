@@ -1,6 +1,7 @@
 package logic
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/OverCV/go-automats/models"
@@ -27,9 +28,17 @@ func (d *Determiner) SetAutomata(automata *models.Automata) {
 func (d *Determiner) Determine() *models.Automata {
 	states := d.Automata.GetStates()
 	d.setRealAdjacent(states)
+
+	// Print all the states
+	for _, state := range states {
+		fmt.Println(state.GetData())
+	}
+
 	d.autoTable = d.createTable()
 
 	auto := d.formatAutomata(d.autoTable)
+
+	fmt.Print(auto.ToString())
 	return auto
 }
 
@@ -246,19 +255,22 @@ func (d *Determiner) getStatesAtt(statesData []string) (bool, bool) {
 func (d *Determiner) stateIndexByData(stateDataRegistry map[string][]string, destination string) string {
 	for stateIndex, statesData := range stateDataRegistry {
 		if contains(statesData, destination) {
-			return stateIndex
-		}
+			return stateIndexstateIndexByData(stateDataRegistry map[string][]string, destination string) string {
+	fo stateIndex, statesData := range stateDataRegistry {
+		f contains(statesData, destination) {
+			return tateIndex
 	}
-	return ""
 }
+	return ""
 
-/* ----------------------------------------------------------------------------------------- */
 
-// func (d *Determiner) contains(slice []string, item string) bool {
-// 	for _, a := range slice {
-// 		if a == item {
-// 			return true
-// 		}
+/* ---------------------------------------------------------------------------------------- */
+
+// func (d *Deteriner) contains(slice []string, item string) bool {
+// 	fo _, a := range slice {
+// 		f a == item {
+// 			return tru
+// 	}
 // 	}
 // 	return false
 // }

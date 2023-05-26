@@ -363,18 +363,15 @@ func clearInputBuffer(reader *bufio.Reader) {
 /* Project Phase II */
 
 func (c *Controller) NormalizeAutomata() error {
-	normal := logic.NewDeterminer()
-
 	if c.selectedAutomata == nil {
 		return fmt.Errorf("ningún autómata seleccionado")
 	}
+	normal := logic.NewDeterminer()
 
 	normal.SetAutomata(c.selectedAutomata)
-	newAutomata := normal.Determine()
 
-	// if err != nil {
-	// 	return nil, fmt.Errorf("error al normalizar el autómata: %v", err)
-	// }
+	newAutomata := normal.Determine()
+	newAutomata.SetName("AFD")
 
 	c.AutomatsList = append(c.AutomatsList, newAutomata)
 	c.selectedAutomata = newAutomata
@@ -384,16 +381,10 @@ func (c *Controller) NormalizeAutomata() error {
 	// fmt.Println("Autómata creado y guardado exitosamente.")
 
 	// FUNCIONALIDAD PELIGROSA
-	fmt.Print(c.selectedAutomata.ToString())
 
-	// Guardar el autómata en el archivo JSON
-	// if c.writeJSONFile(inputJSONFile, newAuto) {
-	// 	fmt.Println("Json guardado")
-	// }
-
-	// if newAutomata == nil {
-	// 	return fmt.Errorf("no se pudo determinar el autómata")
-	// }
+	if newAutomata == nil {
+		return fmt.Errorf("no se pudo determinar el autómata")
+	}
 
 	return nil
 }
@@ -405,8 +396,6 @@ func (c *Controller) GenerateAutomata() (*models.Automata, error) {
 	c.selectedAutomata = newAuto
 
 	c.SelectAutomata(len(c.AutomatsList) - 1)
-
-	fmt.Print(c.selectedAutomata.ToString())
 
 	return newAuto, nil
 }
