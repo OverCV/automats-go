@@ -10,6 +10,7 @@ type Automata struct {
 	States      []*State
 	Transitions []*Transition
 	Alphabet    []string
+	language    []string
 }
 
 func NewAutomaton() *Automata {
@@ -60,6 +61,20 @@ func (a *Automata) SetAlphabet(symbols []string) {
 
 func (a *Automata) GetAlphabet() []string {
 	return a.Alphabet
+}
+func (a *Automata) SetLanguage(symbols []string) {
+	a.Alphabet = symbols
+}
+
+func (a *Automata) GetLanguage() []string {
+	language := []string{}
+	for _, transition := range a.GetTransitions() {
+		if !a.ExistObj(transition.GetChars(), language) {
+			language = append(language, transition.GetChars()...)
+		}
+
+	}
+	return language
 }
 
 func (a *Automata) ExistObj(obj interface{}, list interface{}) bool {
@@ -112,8 +127,7 @@ func (a *Automata) NewTransition(start string, end string, data []string) bool {
 		return false
 	}
 
-	state := a.GetState(start)
-	state.SetAdjacent(append(state.GetAdjacent(), end))
+	// state := a.GetState(start)
 	a.Transitions = append(a.Transitions, newTransition)
 
 	return true
@@ -140,6 +154,11 @@ func (a *Automata) ToString() string {
 		"\nName: %s\nStates: %s\nTransitions: %s\nAlphabet: %v",
 		a.GetName(), a.SeeStates(), a.SeeTransitions(), a.Alphabet,
 	)
+}
+
+func (a *Automata) AddAdjacent(stateData string, adjacent map[string][]string) {
+	state := a.GetState(stateData)
+	state.SetAdjacent(adjacent)
 }
 
 // func contains(arr []string, str string) bool {

@@ -4,9 +4,8 @@ abaa
 abc
 bbb
 bbc
+
 cba
-cca
-cbc
-cba
+cbaaaaaaaaa
 
 (a|c)ba*

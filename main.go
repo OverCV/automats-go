@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	// Return statement without specify variable name
 	controller := controllers.NewController()
 	uinterface := views.NewUI(controller)
 	err := uinterface.RunUI()

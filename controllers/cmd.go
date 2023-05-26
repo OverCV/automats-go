@@ -6,19 +6,21 @@ import (
 	"os"
 	"strings"
 
+	"github.com/OverCV/go-automats/logic"
 	"github.com/OverCV/go-automats/models"
 )
 
 const (
 	inputJSONFile    = "data/auto.json"
 	inputTextFile    = "data/input.txt"
-	AbsInputTextFile = "D:/Código/automatas/goiii/data"
+	AbsInputTextFile = "D:/Academy/Computación/Automatas/Golang/goiii/data"
 	outputImagePath  = "data/graph.png"
 )
 
 type Controller struct {
 	selectedAutomata *models.Automata
 	AutomatsList     []*models.Automata
+	Determiner       *logic.Determiner
 	inputStrings     []string
 	function         *models.Function
 }
@@ -129,6 +131,30 @@ func (c *Controller) CreateAutomata(name string) bool {
 
 	// Guardar el autómata en el archivo JSON
 	if c.writeJSONFile(inputJSONFile, auto) {
+		fmt.Println("Json guardado")
+		c.GenerateImage()
+		return true
+	}
+	return false
+}
+
+func (c *Controller) AddAutomata(automata *models.Automata) bool {
+	if automata == nil {
+		fmt.Println("Automata nil")
+		return false
+	}
+
+	// Añadir el objeto Automata a la lista de autómatas (c.automataList) y seleccionarlo como el autómata actual (c.selectedAutomaton).
+	c.AutomatsList = append(c.AutomatsList, automata)
+	c.selectedAutomata = automata
+
+	fmt.Println("Autómata creado y guardado exitosamente.")
+
+	// FUNCIONALIDAD PELIGROSA
+	c.SelectAutomata(len(c.AutomatsList) - 1)
+
+	// Guardar el autómata en el archivo JSON
+	if c.writeJSONFile(inputJSONFile, automata) {
 		fmt.Println("Json guardado")
 		c.GenerateImage()
 		return true
@@ -332,4 +358,86 @@ func clearInputBuffer(reader *bufio.Reader) {
 			break
 		}
 	}
+}
+
+/* Project Phase II */
+
+func (c *Controller) NormalizeAutomata() error {
+	normal := logic.NewDeterminer()
+
+	if c.selectedAutomata == nil {
+		return fmt.Errorf("ningún autómata seleccionado")
+	}
+
+	normal.SetAutomata(c.selectedAutomata)
+	newAutomata := normal.Determine()
+
+	// if err != nil {
+	// 	return nil, fmt.Errorf("error al normalizar el autómata: %v", err)
+	// }
+
+	c.AutomatsList = append(c.AutomatsList, newAutomata)
+	c.selectedAutomata = newAutomata
+
+	c.SelectAutomata(len(c.AutomatsList) - 1)
+
+	// fmt.Println("Autómata creado y guardado exitosamente.")
+
+	// FUNCIONALIDAD PELIGROSA
+	fmt.Print(c.selectedAutomata.ToString())
+
+	// Guardar el autómata en el archivo JSON
+	// if c.writeJSONFile(inputJSONFile, newAuto) {
+	// 	fmt.Println("Json guardado")
+	// }
+
+	// if newAutomata == nil {
+	// 	return fmt.Errorf("no se pudo determinar el autómata")
+	// }
+
+	return nil
+}
+
+func (c *Controller) GenerateAutomata() (*models.Automata, error) {
+	newAuto := c.createAutoI()
+
+	c.AutomatsList = append(c.AutomatsList, newAuto)
+	c.selectedAutomata = newAuto
+
+	c.SelectAutomata(len(c.AutomatsList) - 1)
+
+	fmt.Print(c.selectedAutomata.ToString())
+
+	return newAuto, nil
+}
+
+func (c *Controller) createAutoI() *models.Automata {
+	newAuto := models.NewAutomaton()
+
+	newAuto.SetName("AFND")
+
+	newAuto.NewState("A", true, false)
+	newAuto.NewState("B", false, false)
+	newAuto.NewState("C", false, false)
+	newAuto.NewState("D", false, false)
+	newAuto.NewState("E", false, false)
+	newAuto.NewState("F", false, false)
+	newAuto.NewState("G", false, false)
+	newAuto.NewState("H", false, false)
+	newAuto.NewState("I", false, false)
+	newAuto.NewState("J", false, true)
+
+	newAuto.NewTransition("A", "B", []string{"a"})
+	newAuto.NewTransition("B", "C", []string{"_"})
+	newAuto.NewTransition("C", "D", []string{"a"})
+	newAuto.NewTransition("C", "D", []string{"_"})
+	newAuto.NewTransition("D", "E", []string{"_"})
+	newAuto.NewTransition("E", "F", []string{"_"})
+	newAuto.NewTransition("E", "H", []string{"_"})
+	newAuto.NewTransition("F", "G", []string{"a"})
+	newAuto.NewTransition("H", "I", []string{"b"})
+	newAuto.NewTransition("G", "J", []string{"_"})
+	newAuto.NewTransition("I", "J", []string{"_"})
+
+	return newAuto
 }

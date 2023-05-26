@@ -59,7 +59,13 @@ func automataToGraphviz(automata *models.Automata) (*gographviz.Graph, error) {
 
 	for _, transition := range automata.Transitions {
 		attrs := make(map[string]string)
-		attrs["label"] = "\"" + strings.Join(transition.Chars, ", ") + "\""
+		chars := transition.GetChars()
+		for i, element := range chars {
+			if element == "_" {
+				chars[i] = "ε"
+			}
+		}
+		attrs["label"] = "\"" + strings.Join(chars, ", ") + "\""
 		graph.AddEdge(transition.Start, transition.End, true, attrs)
 	}
 
@@ -90,34 +96,3 @@ func saveGraphAsPNG(graph *gographviz.Graph, outputPath string) error {
 
 	return nil
 }
-
-// func convertPNGtoJPG(pngFilePath, jpgFilePath string) error {
-// 	// Abrir archivo PNG
-// 	pngFile, err := os.Open(pngFilePath)
-// 	if err != nil {
-// 		return fmt.Errorf("error abriendo archivo PNG: %v", err)
-// 	}
-// 	defer pngFile.Close()
-
-// 	// Decodificar archivo PNG
-// 	pngImage, err := png.Decode(pngFile)
-// 	if err != nil {
-// 		return fmt.Errorf("error decodificando archivo PNG: %v", err)
-// 	}
-
-// 	// Crear archivo JPG
-// 	jpgFile, err := os.Create(jpgFilePath)
-// 	if err != nil {
-// 		return fmt.Errorf("error creando archivo JPG: %v", err)
-// 	}
-// 	defer jpgFile.Close()
-
-// 	// Codificar la imagen PNG en formato JPEG y guardarla en el archivo JPG
-// 	var quality = 75 // Define la calidad de la imagen JPEG (entre 1 y 100)
-// 	err = jpeg.Encode(jpgFile, pngImage, &jpeg.Options{Quality: quality})
-// 	if err != nil {
-// 		return fmt.Errorf("error codificando imagen en formato JPG: %v", err)
-// 	}
-
-// 	return nil
-// }
